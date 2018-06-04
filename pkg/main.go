@@ -52,18 +52,6 @@ func main() {
 
 // Examples for sql
 
-// type Ticker struct {
-// 	Type      string `json:"type" db:"type"`
-// 	Time      string `json:"time" db:"time"`
-// 	ProductId string `json:"product_id" db:"product_id"`
-// 	TradeId   int32  `json:"trade_id" db:"trade_id"`
-// 	Sequence  int32  `json:"sequence" db:"sequence"`
-// 	Price     string `json:"price" db:"price"`
-// 	Side      string `json:"side" db:"side"`
-// 	LastSize  string `json:"last_size" db:"last_size"`
-// 	BestBid   string `json:"best_bid" db:"best_bid"`
-// 	BestAsk   string `json:"best_ask" db:"best_ask"`
-// }
 // const INSERT_TICKER = "INSERT INTO ticker_data (type, time, product_id, trade_id, sequence, price, side, last_size, best_bid, best_ask) VALUES (:type, :time, :product_id, :trade_id, :sequence, :price, :side, :last_size, :best_bid, :best_ask)"
 // _, err := db.NamedExec(INSERT_TICKER, ticker)
 // db, err := sqlx.Open("mysql", "username:password@tcp(url.cynquq8xdx58.us-west-2.rds.amazonaws.com)/trading_data")
