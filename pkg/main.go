@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 
+	"github.com/jmoiron/sqlx"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -11,7 +13,11 @@ type Login struct {
 	Password string `json:"password" binding:"required"`
 }
 
+// DB is a connection to the AWS MySql db
+var DB *sqlx.DB
+
 func main() {
+	DB = Connect()
 	r := gin.Default()
 	r.GET("/gj", func(c *gin.Context) {
 		fmt.Println("At gj!")
