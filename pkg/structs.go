@@ -11,16 +11,19 @@ type Issue struct {
 	Reporter    int32  `json:"Reporter,omitempty" db:"reporter"`
 	Updates     int32  `json:"Updates" db:"updates"`
 	DueDate     string `json:"DueDate,omitempty" db:"due_date"`
+	Board       int32  `json:"Board" db:"board" binding:"required"`
 }
 
 // User is a user object used for authentication
 type User struct {
-	ID        int32  `json:"ID" db:"id" binding:"required"`
-	FirstName string `json:"FirstName" db:"first_name" binding:"required"`
-	LastName  string `json:"LastName" db:"last_name" binding:"required"`
-	Email     string `json:"Email" db:"email" binding:"required"`
-	Password  string `json:"Password" db:"password" binding:"required"`
-	Salt      string `json:"Salt" db:"salt" binding:"required"`
+	ID        int32   `json:"ID" db:"id" binding:"required"`
+	FirstName string  `json:"FirstName" db:"first_name" binding:"required"`
+	LastName  string  `json:"LastName" db:"last_name" binding:"required"`
+	Email     string  `json:"Email" db:"email" binding:"required"`
+	Password  string  `json:"Password" db:"password" binding:"required"`
+	Salt      string  `json:"Salt" db:"salt" binding:"required"`
+	Issues    []Issue `json:"Issues"`
+	Boards    []Board `json:"Boards"`
 }
 
 // Board contains a list of issues and info about board

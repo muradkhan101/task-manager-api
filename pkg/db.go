@@ -20,6 +20,8 @@ const (
 const (
 	GetIssuesByOwner = "SELECT * FROM issues WHERE owner = %s"
 	GettIssueById    = "SELECT * FROM issues WHERE id = %s"
+	GetIssuesByBoard = "SELECT * FROM issues WHERE board = %s"
+	GetBoardByID     = "SELECT * FROM boards WHERE id = %s"
 	GetBoardsByOwner = "SELECT * FROM boards WHERE owner = %s"
 )
 
