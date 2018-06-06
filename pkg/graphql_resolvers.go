@@ -6,10 +6,10 @@ import (
 	"github.com/graphql-go/graphql"
 )
 
-// IssueResolver retrieves list of Issues for a user / org
-var IssueResolver = &graphql.Field{
+// UserResolver retreieves user info based off ID
+var userResolver = &graphql.Field{
 	Type:        IssueType,
-	Description: "Get issues for a user / organization by querying off ID",
+	Description: "Get info about a user",
 	Args: graphql.FieldConfigArgument{
 		"id": &graphql.ArgumentConfig{
 			Type: graphql.Int,
@@ -17,9 +17,9 @@ var IssueResolver = &graphql.Field{
 	},
 	Resolve: func(params graphql.ResolveParams) (interface{}, error) {
 		id, isOk := params.Args["id"]
-		var queryResult []Issue
+		var queryResult User
 		if isOk {
-			err := DB.Select(&queryResult, GetIssuesByOwner, id)
+			err := DB.Select(&queryResult, GetUserInfo, id)
 			if err != nil {
 				return queryResult, err
 			}
@@ -28,10 +28,10 @@ var IssueResolver = &graphql.Field{
 	},
 }
 
-// BoardResolver retrieves list of Boards for a user / org
-var BoardResolver = &graphql.Field{
+// BoardResolver retrieves info about a board based off ID
+var boardResolver = &graphql.Field{
 	Type:        BoardType,
-	Description: "Get boards for a user / organization by querying off ID",
+	Description: "Get info about a board",
 	Args: graphql.FieldConfigArgument{
 		"id": &graphql.ArgumentConfig{
 			Type: graphql.Int,
@@ -39,9 +39,9 @@ var BoardResolver = &graphql.Field{
 	},
 	Resolve: func(params graphql.ResolveParams) (interface{}, error) {
 		id, isOk := params.Args["id"]
-		var queryResult []Board
+		var queryResult Board
 		if isOk {
-			err := DB.Select(&queryResult, GetBoardsByOwner, id)
+			err := DB.Select(&queryResult, GetBoardByID, id)
 			if err != nil {
 				return queryResult, err
 			}
@@ -50,28 +50,23 @@ var BoardResolver = &graphql.Field{
 	},
 }
 
-var IssuesByBoardResolver = &graphql.Field{
-	Type:        IssueType,
-	Description: "Get issues for on a board",
-	Args: graphql.FieldConfigArgument{
-		"id": &graphql.ArgumentConfig{
-			Type: graphql.Int,
+var rootQuery = graphql.NewObject(
+	graphql.ObjectConfig{
+		Name: "RootQuery",
+		Fields: &graphql.Fields{
+			"user":  userResolver,
+			"board": boardResolver,
 		},
 	},
-	Resolve: func(params graphql.ResolveParams) (interface{}, error) {
-		id, isOk := params.Args["id"]
-		var queryResult []Issue
-		if isOk {
-			err := DB.Select(&queryResult, GetIssuesByOwner, id)
-			if err != nil {
-				return queryResult, err
-			}
-		}
-		return queryResult, nil
-	},
-}
+)
 
-func ExecuteQuery(query string, schema graphql.Schema) *graphql.Result {
+var schema, _ = graphql.NewSchema(
+	graphql.SchemaConfig{
+		Query: rootQuery,
+	},
+)
+
+func queryGraphql(query string, schema graphql.Schema) *graphql.Result {
 	result := graphql.Do(graphql.Params{
 		Schema:        schema,
 		RequestString: query,
@@ -80,4 +75,9 @@ func ExecuteQuery(query string, schema graphql.Schema) *graphql.Result {
 		fmt.Printf("Wrong result, errors occured: %v", result.Errors)
 	}
 	return result
+}
+
+// ExecuteQuery executes the given graphql query and returns the result
+func ExecuteQuery(query string) *graphql.Result {
+	return queryGraphql(query, schema)
 }

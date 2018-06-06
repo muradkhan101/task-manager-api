@@ -20,8 +20,6 @@ type User struct {
 	FirstName string  `json:"FirstName" db:"first_name" binding:"required"`
 	LastName  string  `json:"LastName" db:"last_name" binding:"required"`
 	Email     string  `json:"Email" db:"email" binding:"required"`
-	Password  string  `json:"Password" db:"password" binding:"required"`
-	Salt      string  `json:"Salt" db:"salt" binding:"required"`
 	Issues    []Issue `json:"Issues"`
 	Boards    []Board `json:"Boards"`
 }

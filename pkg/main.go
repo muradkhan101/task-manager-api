@@ -8,11 +8,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type Login struct {
-	Username string `json:"username" binding:"required"`
-	Password string `json:"password" binding:"required"`
-}
-
 // DB is a connection to the AWS MySql db
 var DB *sqlx.DB
 
@@ -22,6 +17,12 @@ func main() {
 	r.GET("/gj", func(c *gin.Context) {
 		fmt.Println("At gj!")
 		c.String(200, "<p>Good job!</p>")
+	})
+	r.Any("/graphql", func(c *gin.Context) {
+		query, _ := c.GetQuery("query")
+		fmt.Print(query)
+		result := ExecuteQuery(query)
+		c.JSON(200, result)
 	})
 	test := r.Group("/test")
 	{
@@ -43,14 +44,6 @@ func main() {
 		test2.GET("/", func(c *gin.Context) {
 			fmt.Println("test2 root")
 			c.String(200, "It works!")
-		})
-		test2.POST("/post", func(c *gin.Context) {
-			var login Login
-			if err := c.ShouldBindJSON(&login); err == nil {
-				fmt.Println("You logged in!")
-			} else {
-				fmt.Println("ERROR! RED ALERT! RED ALERT!")
-			}
 		})
 	}
 	r.Run(":3000")
