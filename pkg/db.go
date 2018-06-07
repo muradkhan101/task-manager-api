@@ -18,12 +18,12 @@ const (
 )
 
 const (
-	GetIssuesByOwner = "SELECT * FROM issues WHERE owner = %d"
-	GettIssueById    = "SELECT * FROM issues WHERE id = %d"
-	GetIssuesByBoard = "SELECT * FROM issues WHERE board = %d"
-	GetBoardByID     = "SELECT * FROM boards WHERE id = %d"
-	GetBoardsByOwner = "SELECT * FROM boards WHERE owner = %d"
-	GetUserInfo      = "SELECT id, first_name, last_name, email FROM users where id = %d"
+	GetIssuesByOwner = "SELECT * FROM issues WHERE owner = %d;"
+	GettIssueById    = "SELECT * FROM issues WHERE id = %d;"
+	GetIssuesByBoard = "SELECT * FROM issues WHERE board = %d;"
+	GetBoardByID     = "SELECT * FROM boards WHERE id = %d;"
+	GetBoardsByOwner = "SELECT * FROM boards WHERE owner = %d;"
+	GetUserInfo      = "SELECT id, first_name, last_name, email FROM users where id = %d;"
 )
 
 // Connect s to AWS RDS instance using credentials in environment variables

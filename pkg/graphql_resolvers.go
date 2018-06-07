@@ -8,7 +8,7 @@ import (
 
 // UserResolver retreieves user info based off ID
 var userResolver = &graphql.Field{
-	Type:        IssueType,
+	Type:        UserType,
 	Description: "Get info about a user",
 	Args: graphql.FieldConfigArgument{
 		"id": &graphql.ArgumentConfig{
@@ -17,12 +17,12 @@ var userResolver = &graphql.Field{
 	},
 	Resolve: func(params graphql.ResolveParams) (interface{}, error) {
 		id, isOk := params.Args["id"]
-		var queryResult User
+		var queryResult []User
 		if isOk {
-			err := DB.Select(&queryResult, GetUserInfo, id)
-			if err != nil {
-				return queryResult, err
-			}
+			query := fmt.Sprintf(GetUserInfo, id)
+			fmt.Println("query: ", query)
+			err := DB.Select(&queryResult, query)
+			return queryResult[0], err
 		}
 		return queryResult, nil
 	},
@@ -39,12 +39,12 @@ var boardResolver = &graphql.Field{
 	},
 	Resolve: func(params graphql.ResolveParams) (interface{}, error) {
 		id, isOk := params.Args["id"]
-		var queryResult Board
+		var queryResult []Board
 		if isOk {
-			err := DB.Select(&queryResult, GetBoardByID, id)
-			if err != nil {
-				return queryResult, err
-			}
+			query := fmt.Sprintf(GetBoardByID, id)
+			fmt.Println("query: ", query)
+			err := DB.Select(&queryResult, query)
+			return queryResult[0], err
 		}
 		return queryResult, nil
 	},
@@ -53,7 +53,7 @@ var boardResolver = &graphql.Field{
 var rootQuery = graphql.NewObject(
 	graphql.ObjectConfig{
 		Name: "RootQuery",
-		Fields: &graphql.Fields{
+		Fields: graphql.Fields{
 			"user":  userResolver,
 			"board": boardResolver,
 		},
