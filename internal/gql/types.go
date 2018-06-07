@@ -1,9 +1,10 @@
-package main
+package gql
 
 import (
 	"fmt"
 
 	"github.com/graphql-go/graphql"
+	. "github.com/task-manager-api/internal/types"
 )
 
 // UserType is graphql object for user data with ability to get ISsues and Boards
@@ -27,9 +28,7 @@ var UserType = graphql.NewObject(
 						err := DB.Select(&queryResult, query)
 						return queryResult, err
 					}
-					issue := make([]Issue, 1)
-					issue[0] = Issue{123, 456, "12/21/1990", 6969, "Boil potatoes", "Boil them, mash them, put them in a stew", 1111, 11, "Tomorrow", 666}
-					return issue, nil
+					return queryResult, nil
 				},
 			},
 			"Boards": &graphql.Field{
@@ -44,11 +43,7 @@ var UserType = graphql.NewObject(
 						err := DB.Select(&queryResult, query)
 						return queryResult, err
 					}
-					issue := make([]Issue, 1)
-					issue[0] = Issue{123, 456, "12/21/1990", 6969, "Boil potatoes", "Boil them, mash them, put them in a stew", 1111, 11, "Tomorrow", 666}
-					board := make([]Board, 1)
-					board[0] = Board{123, 456, "12/21/1990", 6969, "Boil potatoes", 1, issue}
-					return board, nil
+					return queryResult, nil
 				},
 			},
 		},
@@ -96,9 +91,7 @@ var BoardType = graphql.NewObject(
 						err := DB.Select(&queryResult, query)
 						return queryResult, err
 					}
-					issue := make([]Issue, 1)
-					issue[0] = Issue{123, 456, "12/21/1990", 6969, "Boil potatoes", "Boil them, mash them, put them in a stew", 1111, 11, "Tomorrow", 666}
-					return issue, nil
+					return queryResult, nil
 				},
 			},
 		},

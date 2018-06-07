@@ -1,4 +1,4 @@
-package main
+package types
 
 // Issue contains information about a specific task to be worked on by the user
 type Issue struct {

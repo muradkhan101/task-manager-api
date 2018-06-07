@@ -1,13 +1,14 @@
-package main
+package gql
 
 import (
 	"fmt"
 
 	"github.com/graphql-go/graphql"
+	. "github.com/task-manager-api/internal/types"
 )
 
 // UserResolver retreieves user info based off ID
-var userResolver = &graphql.Field{
+var UserResolver = &graphql.Field{
 	Type:        UserType,
 	Description: "Get info about a user",
 	Args: graphql.FieldConfigArgument{
@@ -29,7 +30,7 @@ var userResolver = &graphql.Field{
 }
 
 // BoardResolver retrieves info about a board based off ID
-var boardResolver = &graphql.Field{
+var BoardResolver = &graphql.Field{
 	Type:        BoardType,
 	Description: "Get info about a board",
 	Args: graphql.FieldConfigArgument{
@@ -48,36 +49,4 @@ var boardResolver = &graphql.Field{
 		}
 		return queryResult, nil
 	},
-}
-
-var rootQuery = graphql.NewObject(
-	graphql.ObjectConfig{
-		Name: "RootQuery",
-		Fields: graphql.Fields{
-			"user":  userResolver,
-			"board": boardResolver,
-		},
-	},
-)
-
-var schema, _ = graphql.NewSchema(
-	graphql.SchemaConfig{
-		Query: rootQuery,
-	},
-)
-
-func queryGraphql(query string, schema graphql.Schema) *graphql.Result {
-	result := graphql.Do(graphql.Params{
-		Schema:        schema,
-		RequestString: query,
-	})
-	if len(result.Errors) > 0 {
-		fmt.Printf("Wrong result, errors occured: %v", result.Errors)
-	}
-	return result
-}
-
-// ExecuteQuery executes the given graphql query and returns the result
-func ExecuteQuery(query string) *graphql.Result {
-	return queryGraphql(query, schema)
 }

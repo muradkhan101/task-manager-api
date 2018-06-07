@@ -1,4 +1,4 @@
-package main
+package gql
 
 import (
 	"fmt"
@@ -26,18 +26,24 @@ const (
 	GetUserInfo      = "SELECT id, first_name, last_name, email FROM users where id = %d;"
 )
 
+// DB is a connection to the sql db
+var DB *sqlx.DB
+
 // Connect s to AWS RDS instance using credentials in environment variables
 func Connect() *sqlx.DB {
-	fmt.Print("test")
-	creds := credentials.NewEnvCredentials()
-	authToken, err := rdsutils.BuildAuthToken(endpoint, region, dbUser, creds)
-	if err != nil {
-		log.Fatal("Failed to load AWS credentials")
+	if DB != nil {
+		return DB
+	} else {
+		creds := credentials.NewEnvCredentials()
+		authToken, err := rdsutils.BuildAuthToken(endpoint, region, dbUser, creds)
+		if err != nil {
+			log.Fatal("Failed to load AWS credentials")
+		}
+		connectStr := fmt.Sprintf("%s:%s@tcp(%s)/%s?tls=true", dbUser, authToken, endpoint, dbName)
+		DB, err := sqlx.Connect("mysql", connectStr)
+		if err != nil {
+			log.Fatal("Failed to connect to DB")
+		}
+		return DB
 	}
-	connectStr := fmt.Sprintf("%s:%s@tcp(%s)/%s?tls=true", dbUser, authToken, endpoint, dbName)
-	db, err := sqlx.Connect("mysql", connectStr)
-	if err != nil {
-		log.Fatal("Failed to connect to DB")
-	}
-	return db
 }

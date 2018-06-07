@@ -6,18 +6,19 @@ import (
 	"github.com/jmoiron/sqlx"
 
 	"github.com/gin-gonic/gin"
+	"github.com/task-manager-api/internal/gql"
 )
 
 // DB is a connection to the AWS MySql db
 var DB *sqlx.DB
 
 func main() {
-	DB = Connect()
+	DB = gql.Connect()
 	r := gin.Default()
 	r.Any("/graphql", func(c *gin.Context) {
 		query, _ := c.GetQuery("query")
 		fmt.Print(query)
-		result := ExecuteQuery(query)
+		result := gql.ExecuteQuery(query)
 		c.JSON(200, result)
 	})
 	// test := r.Group("/test")
