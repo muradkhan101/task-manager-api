@@ -9,9 +9,9 @@ type Issue struct {
 	Name        string `json:"Name" db:"name" binding:"required"`
 	Description string `json:"Description" db:"description" binding:"required"`
 	Reporter    int32  `json:"Reporter,omitempty" db:"reporter"`
-	Updates     int32  `json:"Updates" db:"updates"`
-	DueDate     string `json:"DueDate,omitempty" db:"due_date"`
-	Board       int32  `json:"Board" db:"board" binding:"required"`
+	// Updates     int32  `json:"Updates" db:"updates"`
+	DueDate string `json:"DueDate,omitempty" db:"due_date"`
+	Board   int32  `json:"Board" db:"board" binding:"required"`
 }
 
 // User is a user object used for authentication
@@ -26,11 +26,11 @@ type User struct {
 
 // Board contains a list of issues and info about board
 type Board struct {
-	ID         int32   `json:"ID" db:"id" binding:"required"`
-	CreatedBy  int32   `json:"CreatedBy" db:"created_by" binding:"required"`
-	CreateDate string  `json:"CreateDate" db:"created_date" binding:"required"`
-	Owner      int32   `json:"Owner" db:"owner" binding:"required"`
-	Name       string  `json:"Name" db:"name" binding:"required"`
-	Updates    int32   `json:"Updates" db:"updates"`
-	Issues     []Issue `json:"Issues"`
+	ID         int32  `json:"ID" db:"id" binding:"required"`
+	CreatedBy  int32  `json:"CreatedBy" db:"created_by" binding:"required"`
+	CreateDate string `json:"CreateDate" db:"created_date" binding:"required"`
+	Owner      int32  `json:"Owner" db:"owner" binding:"required"`
+	Name       string `json:"Name" db:"name" binding:"required"`
+	// Updates    int32   `json:"Updates" db:"updates"`
+	Issues []Issue `json:"Issues"`
 }

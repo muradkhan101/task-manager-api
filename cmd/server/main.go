@@ -1,24 +1,21 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/jmoiron/sqlx"
 
 	"github.com/gin-gonic/gin"
-	"github.com/task-manager-api/internal/gql"
+	"github.com/task-manager-api/internal/backend"
 )
 
 // DB is a connection to the AWS MySql db
 var DB *sqlx.DB
 
 func main() {
-	DB = gql.Connect()
+	DB = backend.GetDb()
 	r := gin.Default()
 	r.Any("/graphql", func(c *gin.Context) {
 		query, _ := c.GetQuery("query")
-		fmt.Print(query)
-		result := gql.ExecuteQuery(query)
+		result := backend.ExecuteQuery(query)
 		c.JSON(200, result)
 	})
 	// test := r.Group("/test")

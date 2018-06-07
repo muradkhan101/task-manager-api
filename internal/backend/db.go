@@ -1,11 +1,10 @@
-package gql
+package backend
 
 import (
 	"fmt"
 	"log"
+	"os"
 
-	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/aws/aws-sdk-go/service/rds/rdsutils"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 )
@@ -26,24 +25,21 @@ const (
 	GetUserInfo      = "SELECT id, first_name, last_name, email FROM users where id = %d;"
 )
 
-// DB is a connection to the sql db
-var DB *sqlx.DB
-
-// Connect s to AWS RDS instance using credentials in environment variables
-func Connect() *sqlx.DB {
-	if DB != nil {
-		return DB
-	} else {
-		creds := credentials.NewEnvCredentials()
-		authToken, err := rdsutils.BuildAuthToken(endpoint, region, dbUser, creds)
-		if err != nil {
-			log.Fatal("Failed to load AWS credentials")
+func setUpDb() func() *sqlx.DB {
+	var db *sqlx.DB
+	return func() *sqlx.DB {
+		if db != nil {
+			return db
 		}
-		connectStr := fmt.Sprintf("%s:%s@tcp(%s)/%s?tls=true", dbUser, authToken, endpoint, dbName)
-		DB, err := sqlx.Connect("mysql", connectStr)
+		password := os.Getenv("RDS_PASSWORD")
+		connectStr := fmt.Sprintf("%s:%s@tcp(%s)/%s", dbUser, password, endpoint, dbName)
+		db, err := sqlx.Connect("mysql", connectStr)
 		if err != nil {
 			log.Fatal("Failed to connect to DB")
 		}
-		return DB
+		return db
 	}
 }
+
+// GetDb returns a AWS RDS instance using credentials in environment variables
+var GetDb = setUpDb()

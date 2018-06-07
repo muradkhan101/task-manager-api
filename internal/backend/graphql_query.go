@@ -1,4 +1,4 @@
-package gql
+package backend
 
 import (
 	"fmt"
@@ -16,9 +16,20 @@ var rootQuery = graphql.NewObject(
 	},
 )
 
+var rootMutation = graphql.NewObject(
+	graphql.ObjectConfig{
+		Name: "RootMutation",
+		Fields: graphql.Fields{
+			"createBoard": CreateBoard,
+			"updateBoard": UpdateBoard,
+		},
+	},
+)
+
 var schema, _ = graphql.NewSchema(
 	graphql.SchemaConfig{
-		Query: rootQuery,
+		Query:    rootQuery,
+		Mutation: rootMutation,
 	},
 )
 

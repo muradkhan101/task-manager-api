@@ -1,4 +1,4 @@
-package gql
+package backend
 
 import (
 	"fmt"
@@ -21,7 +21,6 @@ var UserResolver = &graphql.Field{
 		var queryResult []User
 		if isOk {
 			query := fmt.Sprintf(GetUserInfo, id)
-			fmt.Println("query: ", query)
 			err := DB.Select(&queryResult, query)
 			return queryResult[0], err
 		}
@@ -43,7 +42,6 @@ var BoardResolver = &graphql.Field{
 		var queryResult []Board
 		if isOk {
 			query := fmt.Sprintf(GetBoardByID, id)
-			fmt.Println("query: ", query)
 			err := DB.Select(&queryResult, query)
 			return queryResult[0], err
 		}

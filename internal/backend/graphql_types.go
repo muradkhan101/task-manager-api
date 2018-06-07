@@ -1,4 +1,4 @@
-package gql
+package backend
 
 import (
 	"fmt"
@@ -25,7 +25,7 @@ var UserType = graphql.NewObject(
 					if isOk {
 						query := fmt.Sprintf(GetIssuesByOwner, user.ID)
 						fmt.Println("query: ", query)
-						err := DB.Select(&queryResult, query)
+						err := GetDb().Select(&queryResult, query)
 						return queryResult, err
 					}
 					return queryResult, nil
@@ -40,7 +40,7 @@ var UserType = graphql.NewObject(
 					if isOk {
 						query := fmt.Sprintf(GetBoardsByOwner, user.ID)
 						fmt.Println("query: ", query)
-						err := DB.Select(&queryResult, query)
+						err := GetDb().Select(&queryResult, query)
 						return queryResult, err
 					}
 					return queryResult, nil
@@ -62,9 +62,9 @@ var IssueType = graphql.NewObject(
 			"Name":        &graphql.Field{Type: graphql.NewNonNull(graphql.String)},
 			"Description": &graphql.Field{Type: graphql.NewNonNull(graphql.String)},
 			"Reporter":    &graphql.Field{Type: graphql.Int},
-			"Updates":     &graphql.Field{Type: graphql.NewNonNull(graphql.Int)},
-			"DueDate":     &graphql.Field{Type: graphql.String},
-			"Board":       &graphql.Field{Type: graphql.NewNonNull(graphql.Int)},
+			// "Updates":     &graphql.Field{Type: graphql.NewNonNull(graphql.Int)},
+			"DueDate": &graphql.Field{Type: graphql.String},
+			"Board":   &graphql.Field{Type: graphql.NewNonNull(graphql.Int)},
 		},
 	},
 )
@@ -88,12 +88,59 @@ var BoardType = graphql.NewObject(
 					if isOk {
 						query := fmt.Sprintf(GetIssuesByBoard, board.ID)
 						fmt.Println("query: ", query)
-						err := DB.Select(&queryResult, query)
+						err := GetDb().Select(&queryResult, query)
 						return queryResult, err
 					}
 					return queryResult, nil
 				},
 			},
+		},
+	},
+)
+
+// BoardInput is definition for board mutations
+var BoardInput = graphql.NewInputObject(
+	graphql.InputObjectConfig{
+		Name: "BoardInput",
+		Fields: graphql.InputObjectConfigFieldMap{
+			"ID":         &graphql.InputObjectFieldConfig{Type: graphql.Int},
+			"CreatedBy":  &graphql.InputObjectFieldConfig{Type: graphql.NewNonNull(graphql.Int)},
+			"CreateDate": &graphql.InputObjectFieldConfig{Type: graphql.NewNonNull(graphql.String)},
+			"Owner":      &graphql.InputObjectFieldConfig{Type: graphql.NewNonNull(graphql.Int)},
+			"Name":       &graphql.InputObjectFieldConfig{Type: graphql.NewNonNull(graphql.String)},
+		},
+	},
+)
+
+// IssueInput is definiton for Issue mutations
+var IssueInput = graphql.NewInputObject(
+	graphql.InputObjectConfig{
+		Name: "IssueInput",
+		Fields: graphql.InputObjectConfigFieldMap{
+			"ID":          &graphql.InputObjectFieldConfig{Type: graphql.Int},
+			"CreatedBy":   &graphql.InputObjectFieldConfig{Type: graphql.NewNonNull(graphql.Int)},
+			"CreateDate":  &graphql.InputObjectFieldConfig{Type: graphql.NewNonNull(graphql.String)},
+			"Owner":       &graphql.InputObjectFieldConfig{Type: graphql.NewNonNull(graphql.Int)},
+			"Name":        &graphql.InputObjectFieldConfig{Type: graphql.NewNonNull(graphql.String)},
+			"Description": &graphql.InputObjectFieldConfig{Type: graphql.NewNonNull(graphql.String)},
+			"Reporter":    &graphql.InputObjectFieldConfig{Type: graphql.Int},
+			"DueDate":     &graphql.InputObjectFieldConfig{Type: graphql.String},
+			"Board":       &graphql.InputObjectFieldConfig{Type: graphql.NewNonNull(graphql.Int)},
+		},
+	},
+)
+
+// UserInput is definiton for User mutations
+var UserInput = graphql.NewInputObject(
+	graphql.InputObjectConfig{
+		Name: "IssueInput",
+		Fields: graphql.InputObjectConfigFieldMap{
+			"ID":        &graphql.InputObjectFieldConfig{Type: graphql.Int},
+			"FirstName": &graphql.InputObjectFieldConfig{Type: graphql.String},
+			"LastName":  &graphql.InputObjectFieldConfig{Type: graphql.String},
+			"Email":     &graphql.InputObjectFieldConfig{Type: graphql.String},
+			"Password":  &graphql.InputObjectFieldConfig{Type: graphql.String},
+			"Salt":      &graphql.InputObjectFieldConfig{Type: graphql.String},
 		},
 	},
 )
