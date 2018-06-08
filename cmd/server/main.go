@@ -18,6 +18,11 @@ func main() {
 		result := backend.ExecuteQuery(query)
 		c.JSON(200, result)
 	})
+	user := r.Group("/user")
+	{
+		user.POST("/login", backend.LoginHandler)
+		user.POST("/create", backend.CreateUserHandler)
+	}
 	// test := r.Group("/test")
 	// {
 	// 	test.GET("/", func(c *gin.Context) {

@@ -49,7 +49,7 @@ var UpdateBoardMutation = &graphql.Field{
 	},
 	Resolve: func(params graphql.ResolveParams) (interface{}, error) {
 		var board Board
-		err := paramsToStruct(&params, "board", &board)
+		paramsToStruct(&params, "board", &board)
 
 		_, err := GetDb().NamedExec(UpdateBoard, board)
 		return board, err

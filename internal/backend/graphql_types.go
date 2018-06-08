@@ -16,6 +16,8 @@ var UserType = graphql.NewObject(
 			"FirstName": &graphql.Field{Type: graphql.NewNonNull(graphql.String)},
 			"LastName":  &graphql.Field{Type: graphql.NewNonNull(graphql.String)},
 			"Email":     &graphql.Field{Type: graphql.NewNonNull(graphql.String)},
+			"Password":  &graphql.Field{Type: graphql.String},
+			"Salt":      &graphql.Field{Type: graphql.String},
 			"Issues": &graphql.Field{
 				Type:        graphql.NewList(IssueType),
 				Description: "Get issues for a user by querying off ID",
@@ -136,11 +138,11 @@ var UserInput = graphql.NewInputObject(
 		Name: "IssueInput",
 		Fields: graphql.InputObjectConfigFieldMap{
 			"ID":        &graphql.InputObjectFieldConfig{Type: graphql.Int},
-			"FirstName": &graphql.InputObjectFieldConfig{Type: graphql.String},
-			"LastName":  &graphql.InputObjectFieldConfig{Type: graphql.String},
-			"Email":     &graphql.InputObjectFieldConfig{Type: graphql.String},
-			"Password":  &graphql.InputObjectFieldConfig{Type: graphql.String},
-			"Salt":      &graphql.InputObjectFieldConfig{Type: graphql.String},
+			"FirstName": &graphql.InputObjectFieldConfig{Type: graphql.NewNonNull(graphql.String)},
+			"LastName":  &graphql.InputObjectFieldConfig{Type: graphql.NewNonNull(graphql.String)},
+			"Email":     &graphql.InputObjectFieldConfig{Type: graphql.NewNonNull(graphql.String)},
+			"Password":  &graphql.InputObjectFieldConfig{Type: graphql.NewNonNull(graphql.String)},
+			"Salt":      &graphql.InputObjectFieldConfig{Type: graphql.NewNonNull(graphql.String)},
 		},
 	},
 )

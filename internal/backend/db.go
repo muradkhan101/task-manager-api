@@ -19,11 +19,12 @@ const (
 // SELECT statements for querying DB
 const (
 	GetIssuesByOwner = "SELECT * FROM issues WHERE owner = %d;"
-	GettIssueById    = "SELECT * FROM issues WHERE id = %d;"
+	GetIssueById     = "SELECT * FROM issues WHERE id = %d;"
 	GetIssuesByBoard = "SELECT * FROM issues WHERE board = %d;"
 	GetBoardByID     = "SELECT * FROM boards WHERE id = %d;"
 	GetBoardsByOwner = "SELECT * FROM boards WHERE owner = %d;"
-	GetUserInfo      = "SELECT id, first_name, last_name, email FROM users where id = %d;"
+	GetUserById      = "SELECT * FROM users where id = %d;"
+	GetUserByEmail   = "SELECT * FROM users WHERE email = %s;"
 )
 
 // CREATE and UPDATE statements for db entities
@@ -32,6 +33,7 @@ const (
 	UpdateBoard = "UPDATE boards SET name = :name WHERE id = :id;"
 	CreateIssue = "INSERT INTO issues (name, description, created_by, create_date, owner, board) VALUES (:name, :description, :created_by, :create_date, :owner, :board);"
 	UpdateIssue = "UPDATE issues SET name = :name, description = :description WHERE id = :id;"
+	CreateUser  = "INSERT INTO users (first_name, last_name, email, password, salt) VALUES (:first_name, :last_name, :email, :password, :salt);"
 )
 
 func setUpDb() func() *sqlx.DB {
