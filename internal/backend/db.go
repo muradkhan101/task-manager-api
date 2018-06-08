@@ -26,10 +26,12 @@ const (
 	GetUserInfo      = "SELECT id, first_name, last_name, email FROM users where id = %d;"
 )
 
-// CREATE and UPDATE statements for db
+// CREATE and UPDATE statements for db entities
 const (
 	CreateBoard = "INSERT INTO boards (name, created_by, create_date, owner) VALUES (:name, :created_by, :create_date, :owner);"
 	UpdateBoard = "UPDATE boards SET name = :name WHERE id = :id;"
+	CreateIssue = "INSERT INTO issues (name, description, created_by, create_date, owner, board) VALUES (:name, :description, :created_by, :create_date, :owner, :board);"
+	UpdateIssue = "UPDATE issues SET name = :name, description = :description WHERE id = :id;"
 )
 
 func setUpDb() func() *sqlx.DB {

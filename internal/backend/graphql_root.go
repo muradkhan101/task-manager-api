@@ -22,6 +22,8 @@ var rootMutation = graphql.NewObject(
 		Fields: graphql.Fields{
 			"createBoard": CreateBoardMutation,
 			"updateBoard": UpdateBoardMutation,
+			"createIssue": CreateIssueMutation,
+			"updateIssue": UpdateIssueMutation,
 		},
 	},
 )
