@@ -21,7 +21,7 @@ var UserResolver = &graphql.Field{
 		var queryResult []User
 		if isOk {
 			query := fmt.Sprintf(GetUserInfo, id)
-			err := DB.Select(&queryResult, query)
+			err := GetDb().Select(&queryResult, query)
 			return queryResult[0], err
 		}
 		return queryResult, nil
@@ -42,7 +42,7 @@ var BoardResolver = &graphql.Field{
 		var queryResult []Board
 		if isOk {
 			query := fmt.Sprintf(GetBoardByID, id)
-			err := DB.Select(&queryResult, query)
+			err := GetDb().Select(&queryResult, query)
 			return queryResult[0], err
 		}
 		return queryResult, nil
