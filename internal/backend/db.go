@@ -24,7 +24,7 @@ const (
 	GetBoardByID     = "SELECT * FROM boards WHERE id = %d;"
 	GetBoardsByOwner = "SELECT * FROM boards WHERE owner = %d;"
 	GetUserById      = "SELECT * FROM users where id = %d;"
-	GetUserByEmail   = "SELECT * FROM users WHERE email = %s;"
+	GetUserByEmail   = "SELECT * FROM users WHERE email = \"%s\";"
 )
 
 // CREATE and UPDATE statements for db entities

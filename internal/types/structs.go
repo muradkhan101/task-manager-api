@@ -16,7 +16,7 @@ type Issue struct {
 
 // User is a user object used for authentication
 type User struct {
-	ID        int32   `json:"ID" db:"id" binding:"required"`
+	ID        int32   `json:"ID" db:"id"`
 	FirstName string  `json:"FirstName" db:"first_name" binding:"required"`
 	LastName  string  `json:"LastName" db:"last_name" binding:"required"`
 	Email     string  `json:"Email" db:"email" binding:"required"`

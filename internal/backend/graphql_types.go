@@ -16,8 +16,6 @@ var UserType = graphql.NewObject(
 			"FirstName": &graphql.Field{Type: graphql.NewNonNull(graphql.String)},
 			"LastName":  &graphql.Field{Type: graphql.NewNonNull(graphql.String)},
 			"Email":     &graphql.Field{Type: graphql.NewNonNull(graphql.String)},
-			"Password":  &graphql.Field{Type: graphql.String},
-			"Salt":      &graphql.Field{Type: graphql.String},
 			"Issues": &graphql.Field{
 				Type:        graphql.NewList(IssueType),
 				Description: "Get issues for a user by querying off ID",

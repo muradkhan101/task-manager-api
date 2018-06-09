@@ -20,7 +20,7 @@ var UserResolver = &graphql.Field{
 		id, isOk := params.Args["id"]
 		var queryResult []User
 		if isOk {
-			query := fmt.Sprintf(GetUserInfo, id)
+			query := fmt.Sprintf(GetUserById, id)
 			err := GetDb().Select(&queryResult, query)
 			return queryResult[0], err
 		}
