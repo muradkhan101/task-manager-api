@@ -10,18 +10,18 @@ import (
 )
 
 // ValidateJwt validates based on HMAC signing and secret found in env variables
-func ValidateJwt(tokenString string) bool {
+func ValidateJwt(tokenString string) *jwt.Token {
 	token, _ := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 		}
 		jwtSecret := os.Getenv("JWT_SECRET")
-		return jwtSecret, nil
+		return []byte(jwtSecret), nil
 	})
 	if _, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		return true
+		return token
 	}
-	return false
+	return nil
 }
 
 // CreateJwt makes JWT with HMAC-256 encoding

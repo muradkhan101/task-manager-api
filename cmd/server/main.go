@@ -1,8 +1,11 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/jmoiron/sqlx"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/task-manager-api/internal/backend"
 )
@@ -13,10 +16,20 @@ var DB *sqlx.DB
 func main() {
 	DB = backend.GetDb()
 	r := gin.Default()
+	r.Use(jwtAuth())
 	r.Any("/graphql", func(c *gin.Context) {
-		query, _ := c.GetQuery("query")
-		result := backend.ExecuteQuery(query)
-		c.JSON(200, result)
+		jwtToken, exists := c.Get("user")
+		if exists {
+			if jwtToken.(jwt.Token).Valid {
+				query, _ := c.GetQuery("query")
+				result := backend.ExecuteQuery(query)
+				c.JSON(200, result)
+			} else {
+				c.AbortWithStatusJSON(403, gin.H{"error": "Your JWT token is invalid"})
+			}
+		} else {
+			c.AbortWithStatusJSON(403, gin.H{"error": "Your JWT token doesn't exist"})
+		}
 	})
 	user := r.Group("/user")
 	{
@@ -46,4 +59,20 @@ func main() {
 	// 	})
 	// }
 	r.Run(":80")
+}
+
+func jwtAuth() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		token := c.GetHeader("Authorization")
+		if len(token) != 0 {
+			// Bearer <- len is 7
+			jwtToken := token[7:len(token)]
+			jwtT := backend.ValidateJwt(jwtToken)
+			fmt.Println("token!", jwtT)
+			if jwtT != nil {
+				c.Set("user", *jwtT)
+			}
+		}
+		c.Next()
+	}
 }
