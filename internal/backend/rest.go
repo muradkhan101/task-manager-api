@@ -1,7 +1,6 @@
 package backend
 
 import (
-	"errors"
 	"fmt"
 	"os"
 
@@ -9,32 +8,34 @@ import (
 	. "github.com/task-manager-api/internal/types"
 )
 
-type jwtToken struct {
-	jwt string
-}
-
 // CreateUserHandler handles creation of a new user
 func CreateUserHandler(c *gin.Context) {
 	var user User
-	c.BindJSON(&user)
-
+	err := c.BindJSON(&user)
+	if err != nil {
+		c.AbortWithStatusJSON(400, gin.H{"error": err.Error()})
+		return
+	}
 	query := fmt.Sprintf(GetUserByEmail, user.Email)
 	var results []User
-	err := GetDb().Select(&results, query)
+	err = GetDb().Select(&results, query)
 
 	if len(results) > 0 {
-		c.AbortWithError(400, errors.New("User already exists"))
+		c.AbortWithStatusJSON(400, gin.H{"error": "User already exists"})
+		return
 	}
 	salt := MakeSalt(24)
 	user.Salt = salt
 
 	secret := os.Getenv("SECRET_KEY")
+	fmt.Println("PASS + SALT", user.Password+salt)
 	pass := Encrypt(user.Password+salt, secret)
 	user.Password = pass
 
 	res, err := GetDb().NamedExec(CreateUser, user)
 	if err != nil {
-		c.AbortWithError(400, err)
+		c.AbortWithStatusJSON(400, gin.H{"error": err.Error()})
+		return
 	}
 	id, _ := res.LastInsertId()
 	user.ID = int32(id)
@@ -42,32 +43,43 @@ func CreateUserHandler(c *gin.Context) {
 	token, err := CreateJwt(user)
 
 	if err != nil {
-		c.AbortWithError(400, err)
+		c.AbortWithStatusJSON(400, gin.H{"error": err.Error()})
+		return
 	}
 
-	c.JSON(200, jwtToken{token})
+	c.JSON(200, gin.H{"jwt": token})
 }
 
 // LoginHandler authenticates a user and returns a JWT token
 func LoginHandler(c *gin.Context) {
-	var user User
-	c.BindJSON(&user)
+	type userLogin struct {
+		Email    string `json:"Email" binding:"required"`
+		Password string `json:"Password" binding:"required"`
+	}
+	var user userLogin
+	err := c.BindJSON(&user)
+	if err != nil {
+		c.AbortWithStatusJSON(400, gin.H{"error": err.Error()})
+		return
+	}
 
 	query := fmt.Sprintf(GetUserByEmail, user.Email)
 	var results []User
-	err := GetDb().Select(&results, query)
+	GetDb().Select(&results, query)
 
 	if len(results) == 0 {
-		c.AbortWithError(400, errors.New("User does not exist"))
+		c.AbortWithStatusJSON(400, gin.H{"error": "User does not exist"})
+		return
 	}
-	pass := user.Password
-
-	auth := CompareEncoded(user.Password+user.Salt, results[0].Password)
+	secret := os.Getenv("SECRET_KEY")
+	fmt.Println("PASS + SALT", user.Password+results[0].Salt)
+	auth := CompareEncoded(user.Password+results[0].Salt, results[0].Password, secret)
 
 	if auth == false {
-		c.AbortWithError(400, errors.New("Password is incorrect"))
+		c.AbortWithStatusJSON(400, gin.H{"error": "Password is incorrect"})
+		return
 	}
 
-	token, _ := CreateJwt(user)
-	c.JSON(200, jwtToken{token})
+	token, _ := CreateJwt(results[0])
+	c.JSON(200, gin.H{"jwt": token})
 }

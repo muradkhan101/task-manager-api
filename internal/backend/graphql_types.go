@@ -16,8 +16,6 @@ var UserType = graphql.NewObject(
 			"FirstName": &graphql.Field{Type: graphql.NewNonNull(graphql.String)},
 			"LastName":  &graphql.Field{Type: graphql.NewNonNull(graphql.String)},
 			"Email":     &graphql.Field{Type: graphql.NewNonNull(graphql.String)},
-			"Password":  &graphql.Field{Type: graphql.String},
-			"Salt":      &graphql.Field{Type: graphql.String},
 			"Issues": &graphql.Field{
 				Type:        graphql.NewList(IssueType),
 				Description: "Get issues for a user by querying off ID",
@@ -59,13 +57,13 @@ var IssueType = graphql.NewObject(
 		Fields: graphql.Fields{
 			"ID":          &graphql.Field{Type: graphql.NewNonNull(graphql.Int)},
 			"CreatedBy":   &graphql.Field{Type: graphql.NewNonNull(graphql.Int)},
-			"CreateDate":  &graphql.Field{Type: graphql.NewNonNull(graphql.Int)},
+			"CreateDate":  &graphql.Field{Type: graphql.NewNonNull(graphql.DateTime)},
 			"Owner":       &graphql.Field{Type: graphql.NewNonNull(graphql.Int)},
 			"Name":        &graphql.Field{Type: graphql.NewNonNull(graphql.String)},
 			"Description": &graphql.Field{Type: graphql.NewNonNull(graphql.String)},
 			"Reporter":    &graphql.Field{Type: graphql.Int},
 			// "Updates":     &graphql.Field{Type: graphql.NewNonNull(graphql.Int)},
-			"DueDate": &graphql.Field{Type: graphql.String},
+			"DueDate": &graphql.Field{Type: graphql.DateTime},
 			"Board":   &graphql.Field{Type: graphql.NewNonNull(graphql.Int)},
 		},
 	},
@@ -78,7 +76,7 @@ var BoardType = graphql.NewObject(
 		Fields: graphql.Fields{
 			"ID":         &graphql.Field{Type: graphql.NewNonNull(graphql.Int)},
 			"CreatedBy":  &graphql.Field{Type: graphql.NewNonNull(graphql.Int)},
-			"CreateDate": &graphql.Field{Type: graphql.NewNonNull(graphql.Int)},
+			"CreateDate": &graphql.Field{Type: graphql.NewNonNull(graphql.DateTime)},
 			"Owner":      &graphql.Field{Type: graphql.NewNonNull(graphql.Int)},
 			"Name":       &graphql.Field{Type: graphql.NewNonNull(graphql.String)},
 			"Issues": &graphql.Field{
@@ -107,7 +105,7 @@ var BoardInput = graphql.NewInputObject(
 		Fields: graphql.InputObjectConfigFieldMap{
 			"ID":         &graphql.InputObjectFieldConfig{Type: graphql.Int},
 			"CreatedBy":  &graphql.InputObjectFieldConfig{Type: graphql.NewNonNull(graphql.Int)},
-			"CreateDate": &graphql.InputObjectFieldConfig{Type: graphql.NewNonNull(graphql.Int)},
+			"CreateDate": &graphql.InputObjectFieldConfig{Type: graphql.NewNonNull(graphql.DateTime)},
 			"Owner":      &graphql.InputObjectFieldConfig{Type: graphql.NewNonNull(graphql.Int)},
 			"Name":       &graphql.InputObjectFieldConfig{Type: graphql.NewNonNull(graphql.String)},
 		},
@@ -121,12 +119,12 @@ var IssueInput = graphql.NewInputObject(
 		Fields: graphql.InputObjectConfigFieldMap{
 			"ID":          &graphql.InputObjectFieldConfig{Type: graphql.Int},
 			"CreatedBy":   &graphql.InputObjectFieldConfig{Type: graphql.NewNonNull(graphql.Int)},
-			"CreateDate":  &graphql.InputObjectFieldConfig{Type: graphql.NewNonNull(graphql.Int)},
+			"CreateDate":  &graphql.InputObjectFieldConfig{Type: graphql.NewNonNull(graphql.DateTime)},
 			"Owner":       &graphql.InputObjectFieldConfig{Type: graphql.NewNonNull(graphql.Int)},
 			"Name":        &graphql.InputObjectFieldConfig{Type: graphql.NewNonNull(graphql.String)},
 			"Description": &graphql.InputObjectFieldConfig{Type: graphql.NewNonNull(graphql.String)},
 			"Reporter":    &graphql.InputObjectFieldConfig{Type: graphql.Int},
-			"DueDate":     &graphql.InputObjectFieldConfig{Type: graphql.String},
+			"DueDate":     &graphql.InputObjectFieldConfig{Type: graphql.DateTime},
 			"Board":       &graphql.InputObjectFieldConfig{Type: graphql.NewNonNull(graphql.Int)},
 		},
 	},

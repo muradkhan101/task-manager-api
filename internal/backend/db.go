@@ -24,7 +24,7 @@ const (
 	GetBoardByID     = "SELECT * FROM boards WHERE id = %d;"
 	GetBoardsByOwner = "SELECT * FROM boards WHERE owner = %d;"
 	GetUserById      = "SELECT * FROM users where id = %d;"
-	GetUserByEmail   = "SELECT * FROM users WHERE email = %s;"
+	GetUserByEmail   = "SELECT * FROM users WHERE email = \"%s\";"
 )
 
 // CREATE and UPDATE statements for db entities
@@ -43,7 +43,7 @@ func setUpDb() func() *sqlx.DB {
 			return db
 		}
 		password := os.Getenv("RDS_PASSWORD")
-		connectStr := fmt.Sprintf("%s:%s@tcp(%s)/%s", dbUser, password, endpoint, dbName)
+		connectStr := fmt.Sprintf("%s:%s@tcp(%s)/%s?parseTime=true", dbUser, password, endpoint, dbName)
 		db, err := sqlx.Connect("mysql", connectStr)
 		if err != nil {
 			log.Fatal("Failed to connect to DB")
