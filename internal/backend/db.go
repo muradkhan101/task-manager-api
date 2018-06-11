@@ -43,7 +43,7 @@ func setUpDb() func() *sqlx.DB {
 			return db
 		}
 		password := os.Getenv("RDS_PASSWORD")
-		connectStr := fmt.Sprintf("%s:%s@tcp(%s)/%s", dbUser, password, endpoint, dbName)
+		connectStr := fmt.Sprintf("%s:%s@tcp(%s)/%s?parseTime=true", dbUser, password, endpoint, dbName)
 		db, err := sqlx.Connect("mysql", connectStr)
 		if err != nil {
 			log.Fatal("Failed to connect to DB")
