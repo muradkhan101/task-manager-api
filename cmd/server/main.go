@@ -2,11 +2,9 @@ package main
 
 import (
 	"fmt"
-
-	"github.com/jmoiron/sqlx"
-
-	"github.com/dgrijalva/jwt-go"
+        "github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	"github.com/jmoiron/sqlx"
 	"github.com/task-manager-api/internal/backend"
 )
 
@@ -17,7 +15,8 @@ func main() {
 	DB = backend.GetDb()
 	r := gin.Default()
 	r.Use(jwtAuth())
-	r.Any("/graphql", func(c *gin.Context) {
+	r.Use(addCors())
+	r.GET("/graphql", func(c *gin.Context) {
 		jwtToken, exists := c.Get("user")
 		if exists {
 			if jwtToken.(jwt.Token).Valid {
@@ -30,6 +29,10 @@ func main() {
 		} else {
 			c.AbortWithStatusJSON(403, gin.H{"error": "Your JWT token doesn't exist"})
 		}
+	})
+	r.OPTIONS("/graphql", func(c *gin.Context) {
+		c.SetAccepted("GET,OPTIONS")
+		c.Status(200)
 	})
 	user := r.Group("/user")
 	{
@@ -74,5 +77,12 @@ func jwtAuth() gin.HandlerFunc {
 			}
 		}
 		c.Next()
+	}
+}
+
+func addCors() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Header("Access-Control-Allow-Origin", "*")
+                c.Header("Access-Control-Allow-Headers", "Authorization,Content-Type")
 	}
 }
