@@ -89,3 +89,53 @@ var UpdateIssueMutation = &graphql.Field{
 		return issue, err
 	},
 }
+
+var UpdateTaskOrderMutation = &graphql.Field{
+	Type:        BoardType,
+	Description: "Update the order of tasks",
+	Args: graphql.FieldConfigArgument{
+		"TaskOrder": &graphql.ArgumentConfig{Type: graphql.NewNonNull(graphql.String)},
+		"BoardId":   &graphql.ArgumentConfig{Type: graphql.NewNonNull(graphql.Int)},
+	},
+	Resolve: func(params graphql.ResolveParams) (interface{}, error) {
+		taskParam, _ := params.Args["TaskOrder"]
+		boardParam, _ := params.Args["BoardId"]
+		boardId := int32(boardParam.(int32))
+		taskOrder := string(taskParam.(string))
+		queryStr := fmt.Sprintf(UpdateTaskOrder, taskOrder, boardId)
+		_, err := GetDb().Exec(queryStr)
+		if err != nil {
+			return nil, err
+		}
+
+		var queryResult []Board
+		query := fmt.Sprintf(GetBoardByID, boardId)
+		err = GetDb().Select(&queryResult, query)
+		return queryResult[0], err
+	},
+}
+
+var UpdateBoardOrderMutation = &graphql.Field{
+	Type:        UserType,
+	Description: "Update the order of boards",
+	Args: graphql.FieldConfigArgument{
+		"BoardOrder": &graphql.ArgumentConfig{Type: graphql.NewNonNull(graphql.String)},
+		"UserId":     &graphql.ArgumentConfig{Type: graphql.NewNonNull(graphql.Int)},
+	},
+	Resolve: func(params graphql.ResolveParams) (interface{}, error) {
+		boardParam, _ := params.Args["BoardOrder"]
+		userParam, _ := params.Args["UserId"]
+		boardOrder := string(boardParam.(string))
+		userId := int32(userParam.(int32))
+		queryStr := fmt.Sprintf(UpdateBoardOrder, boardOrder, userId)
+		_, err := GetDb().Exec(queryStr)
+		if err != nil {
+			return nil, err
+		}
+
+		var queryResult []User
+		query := fmt.Sprintf(GetUserById, userId)
+		err = GetDb().Select(&queryResult, query)
+		return queryResult[0], err
+	},
+}

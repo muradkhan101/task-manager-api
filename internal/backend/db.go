@@ -29,11 +29,13 @@ const (
 
 // CREATE and UPDATE statements for db entities
 const (
-	CreateBoard = "INSERT INTO boards (name, created_by, create_date, owner) VALUES (:name, :created_by, :create_date, :owner);"
-	UpdateBoard = "UPDATE boards SET name = :name WHERE id = :id;"
-	CreateIssue = "INSERT INTO issues (name, description, created_by, create_date, owner, board) VALUES (:name, :description, :created_by, :create_date, :owner, :board);"
-	UpdateIssue = "UPDATE issues SET name = :name, description = :description WHERE id = :id;"
-	CreateUser  = "INSERT INTO users (first_name, last_name, email, password, salt) VALUES (:first_name, :last_name, :email, :password, :salt);"
+	CreateBoard      = "INSERT INTO boards (name, created_by, create_date, owner) VALUES (:name, :created_by, :create_date, :owner);"
+	UpdateBoard      = "UPDATE boards SET name = :name WHERE id = :id;"
+	CreateIssue      = "INSERT INTO issues (name, description, created_by, create_date, owner, board) VALUES (:name, :description, :created_by, :create_date, :owner, :board);"
+	UpdateIssue      = "UPDATE issues SET name = :name, description = :description WHERE id = :id;"
+	CreateUser       = "INSERT INTO users (first_name, last_name, email, password, salt) VALUES (:first_name, :last_name, :email, :password, :salt);"
+	UpdateTaskOrder  = "UPDATE boards SET task_order = \"%s\" WHERE id = %d;"
+	UpdateBoardOrder = "UPDATE users set board_order = \"%s\" WHERE id = %d;"
 )
 
 func setUpDb() func() *sqlx.DB {
