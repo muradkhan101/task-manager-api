@@ -98,10 +98,8 @@ var UpdateTaskOrderMutation = &graphql.Field{
 		"BoardId":   &graphql.ArgumentConfig{Type: graphql.NewNonNull(graphql.Int)},
 	},
 	Resolve: func(params graphql.ResolveParams) (interface{}, error) {
-		taskParam, _ := params.Args["TaskOrder"]
-		boardParam, _ := params.Args["BoardId"]
-		boardId := int32(boardParam.(int32))
-		taskOrder := string(taskParam.(string))
+		taskOrder, _ := params.Args["TaskOrder"]
+		boardId, _ := params.Args["BoardId"]
 		queryStr := fmt.Sprintf(UpdateTaskOrder, taskOrder, boardId)
 		_, err := GetDb().Exec(queryStr)
 		if err != nil {
@@ -123,10 +121,8 @@ var UpdateBoardOrderMutation = &graphql.Field{
 		"UserId":     &graphql.ArgumentConfig{Type: graphql.NewNonNull(graphql.Int)},
 	},
 	Resolve: func(params graphql.ResolveParams) (interface{}, error) {
-		boardParam, _ := params.Args["BoardOrder"]
-		userParam, _ := params.Args["UserId"]
-		boardOrder := string(boardParam.(string))
-		userId := int32(userParam.(int32))
+		boardOrder, _ := params.Args["BoardOrder"]
+		userId, _ := params.Args["UserId"]
 		queryStr := fmt.Sprintf(UpdateBoardOrder, boardOrder, userId)
 		_, err := GetDb().Exec(queryStr)
 		if err != nil {

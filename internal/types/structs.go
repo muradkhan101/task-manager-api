@@ -44,5 +44,5 @@ type Board struct {
 	Name       string    `json:"Name" db:"name" binding:"required"`
 	// Updates    int32   `json:"Updates" db:"updates"`
 	Issues     []Issue `json:"Issues"`
-	IssueOrder string  `json:"IssueOrder,omitempty" db:"issue_order"`
+	IssueOrder string  `json:"IssueOrder,omitempty" db:"task_order"`
 }

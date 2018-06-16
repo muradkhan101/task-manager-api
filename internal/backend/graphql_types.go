@@ -46,7 +46,7 @@ var UserType = graphql.NewObject(
 					return queryResult, nil
 				},
 			},
-			"BoardOrder": &graphql.Field{Type: graphql.NewNonNull(graphql.String)},
+			"BoardOrder": &graphql.Field{Type: graphql.String},
 		},
 	},
 )
@@ -96,7 +96,7 @@ var BoardType = graphql.NewObject(
 					return queryResult, nil
 				},
 			},
-			"IssueOrder": &graphql.Field{Type: graphql.NewNonNull(graphql.String)},
+			"TaskOrder": &graphql.Field{Type: graphql.String},
 		},
 	},
 )
