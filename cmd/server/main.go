@@ -2,7 +2,8 @@ package main
 
 import (
 	"fmt"
-        "github.com/dgrijalva/jwt-go"
+
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
 	"github.com/task-manager-api/internal/backend"
@@ -83,6 +84,6 @@ func jwtAuth() gin.HandlerFunc {
 func addCors() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Header("Access-Control-Allow-Origin", "*")
-                c.Header("Access-Control-Allow-Headers", "Authorization,Content-Type")
+		c.Header("Access-Control-Allow-Headers", "Authorization,Content-Type")
 	}
 }

@@ -46,6 +46,7 @@ var UserType = graphql.NewObject(
 					return queryResult, nil
 				},
 			},
+			"BoardOrder": &graphql.Field{Type: graphql.NewNonNull(graphql.String)},
 		},
 	},
 )
@@ -65,6 +66,7 @@ var IssueType = graphql.NewObject(
 			// "Updates":     &graphql.Field{Type: graphql.NewNonNull(graphql.Int)},
 			"DueDate": &graphql.Field{Type: graphql.DateTime},
 			"Board":   &graphql.Field{Type: graphql.NewNonNull(graphql.Int)},
+			"Status":  &graphql.Field{Type: graphql.NewNonNull(graphql.Int)},
 		},
 	},
 )
@@ -94,6 +96,7 @@ var BoardType = graphql.NewObject(
 					return queryResult, nil
 				},
 			},
+			"IssueOrder": &graphql.Field{Type: graphql.NewNonNull(graphql.String)},
 		},
 	},
 )
@@ -126,6 +129,7 @@ var IssueInput = graphql.NewInputObject(
 			"Reporter":    &graphql.InputObjectFieldConfig{Type: graphql.Int},
 			"DueDate":     &graphql.InputObjectFieldConfig{Type: graphql.DateTime},
 			"Board":       &graphql.InputObjectFieldConfig{Type: graphql.NewNonNull(graphql.Int)},
+			"Status":      &graphql.InputObjectFieldConfig{Type: graphql.NewNonNull(graphql.Int)},
 		},
 	},
 )
