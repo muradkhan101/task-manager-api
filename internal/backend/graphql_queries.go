@@ -43,6 +43,7 @@ var BoardResolver = &graphql.Field{
 		if isOk {
 			query := fmt.Sprintf(GetBoardByID, id)
 			err := GetDb().Select(&queryResult, query)
+			fmt.Println(queryResult)
 			return queryResult[0], err
 		}
 		return queryResult, nil

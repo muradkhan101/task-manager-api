@@ -43,6 +43,6 @@ type Board struct {
 	Owner      int32     `json:"Owner" db:"owner" binding:"required"`
 	Name       string    `json:"Name" db:"name" binding:"required"`
 	// Updates    int32   `json:"Updates" db:"updates"`
-	Issues     []Issue `json:"Issues"`
-	IssueOrder string  `json:"IssueOrder,omitempty" db:"task_order"`
+	Issues    []Issue `json:"Issues"`
+	TaskOrder string  `json:"TaskOrder,omitempty" db:"task_order"`
 }

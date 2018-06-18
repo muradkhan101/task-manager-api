@@ -28,7 +28,6 @@ func CreateUserHandler(c *gin.Context) {
 	user.Salt = salt
 
 	secret := os.Getenv("SECRET_KEY")
-	fmt.Println("PASS + SALT", user.Password+salt)
 	pass := Encrypt(user.Password+salt, secret)
 	user.Password = pass
 
@@ -72,7 +71,6 @@ func LoginHandler(c *gin.Context) {
 		return
 	}
 	secret := os.Getenv("SECRET_KEY")
-	fmt.Println("PASS + SALT", user.Password+results[0].Salt)
 	auth := CompareEncoded(user.Password+results[0].Salt, results[0].Password, secret)
 
 	if auth == false {
