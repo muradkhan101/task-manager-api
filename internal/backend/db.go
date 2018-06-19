@@ -2,7 +2,6 @@ package backend
 
 import (
 	"fmt"
-	"log"
 	"os"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -41,15 +40,16 @@ const (
 func setUpDb() func() *sqlx.DB {
 	var db *sqlx.DB
 	return func() *sqlx.DB {
+
 		if db != nil {
+			fmt.Println("DB EXISTS!")
 			return db
 		}
 		password := os.Getenv("RDS_PASSWORD")
 		connectStr := fmt.Sprintf("%s:%s@tcp(%s)/%s?parseTime=true", dbUser, password, endpoint, dbName)
-		db, err := sqlx.Connect("mysql", connectStr)
-		if err != nil {
-			log.Fatal("Failed to connect to DB")
-		}
+		db, _ = sqlx.Open("mysql", connectStr)
+		db.SetMaxIdleConns(10)
+		db.SetMaxOpenConns(25)
 		return db
 	}
 }

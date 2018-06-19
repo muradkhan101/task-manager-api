@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
@@ -72,7 +70,6 @@ func jwtAuth() gin.HandlerFunc {
 			// Bearer <- len is 7
 			jwtToken := token[7:len(token)]
 			jwtT := backend.ValidateJwt(jwtToken)
-			fmt.Println("token!", jwtT)
 			if jwtT != nil {
 				c.Set("user", *jwtT)
 			}
