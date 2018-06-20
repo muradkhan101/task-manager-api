@@ -35,7 +35,6 @@ var CreateBoardMutation = &graphql.Field{
 
 		id, _ := res.LastInsertId()
 		board.ID = int32(id)
-		fmt.Println(board)
 		return board, err
 	},
 }

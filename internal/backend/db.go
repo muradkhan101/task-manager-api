@@ -42,7 +42,6 @@ func setUpDb() func() *sqlx.DB {
 	return func() *sqlx.DB {
 
 		if db != nil {
-			fmt.Println("DB EXISTS!")
 			return db
 		}
 		password := os.Getenv("RDS_PASSWORD")

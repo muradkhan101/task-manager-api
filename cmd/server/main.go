@@ -29,14 +29,13 @@ func main() {
 			c.AbortWithStatusJSON(403, gin.H{"error": "Your JWT token doesn't exist"})
 		}
 	})
-	r.OPTIONS("/graphql", func(c *gin.Context) {
-		c.SetAccepted("GET,OPTIONS")
-		c.Status(200)
-	})
+	r.OPTIONS("/graphql", optionsAdder("GET,OPTIONS"))
 	user := r.Group("/user")
 	{
 		user.POST("/login", backend.LoginHandler)
+		user.OPTIONS("/login", optionsAdder("POST,OPTIONS"))
 		user.POST("/create", backend.CreateUserHandler)
+		user.OPTIONS("/create", optionsAdder("POST,OPTIONS"))
 	}
 	// test := r.Group("/test")
 	// {
@@ -61,6 +60,13 @@ func main() {
 	// 	})
 	// }
 	r.Run(":80")
+}
+
+func optionsAdder(optionTypes string) func(c *gin.Context) {
+	return func(c *gin.Context) {
+		c.SetAccepted(optionTypes)
+		c.Status(200)
+	}
 }
 
 func jwtAuth() gin.HandlerFunc {
