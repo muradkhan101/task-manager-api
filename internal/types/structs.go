@@ -33,6 +33,7 @@ type User struct {
 	Issues     []Issue `json:"Issues"`
 	Boards     []Board `json:"Boards"`
 	BoardOrder string  `json:"BoardOrder,omitempty" db:"board_order"`
+	Theme      string  `json:"Theme" db:'theme'`
 }
 
 // Board contains a list of issues and info about board

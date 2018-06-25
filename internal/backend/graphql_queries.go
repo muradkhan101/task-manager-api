@@ -21,8 +21,11 @@ var UserResolver = &graphql.Field{
 		var queryResult []User
 		if isOk {
 			query := fmt.Sprintf(GetUserById, id)
-			err := GetDb().Select(&queryResult, query)
-			return queryResult[0], err
+			row := GetDb().QueryRow(query)
+			row.Scan(&queryResult)
+			fmt.Println(queryResult)
+			fmt.Println("[USER QUERY]::", queryResult)
+			return queryResult, nil
 		}
 		return queryResult, nil
 	},
@@ -39,12 +42,13 @@ var BoardResolver = &graphql.Field{
 	},
 	Resolve: func(params graphql.ResolveParams) (interface{}, error) {
 		id, isOk := params.Args["id"]
-		var queryResult []Board
+		var queryResult Board
 		if isOk {
 			query := fmt.Sprintf(GetBoardByID, id)
-			err := GetDb().Select(&queryResult, query)
+			row := GetDb().QueryRow(query)
+			row.Scan(&queryResult)
 			fmt.Println(queryResult)
-			return queryResult[0], err
+			return queryResult, nil
 		}
 		return queryResult, nil
 	},

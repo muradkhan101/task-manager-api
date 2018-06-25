@@ -40,13 +40,15 @@ const (
 func setUpDb() func() *sqlx.DB {
 	var db *sqlx.DB
 	return func() *sqlx.DB {
-
 		if db != nil {
 			return db
 		}
 		password := os.Getenv("RDS_PASSWORD")
 		connectStr := fmt.Sprintf("%s:%s@tcp(%s)/%s?parseTime=true", dbUser, password, endpoint, dbName)
-		db, _ = sqlx.Open("mysql", connectStr)
+		db, err := sqlx.Open("mysql", connectStr)
+		if err != nil {
+			fmt.Println("[ERROR]:", err)
+		}
 		db.SetMaxIdleConns(10)
 		db.SetMaxOpenConns(25)
 		return db

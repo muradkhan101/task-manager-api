@@ -46,7 +46,7 @@ func CreateUserHandler(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, gin.H{"jwt": token})
+	c.JSON(200, gin.H{"jwt": token, "ID": id})
 }
 
 // LoginHandler authenticates a user and returns a JWT token
@@ -65,7 +65,8 @@ func LoginHandler(c *gin.Context) {
 	query := fmt.Sprintf(GetUserByEmail, user.Email)
 	var results []User
 	GetDb().Select(&results, query)
-
+	fmt.Println("[USER QUERY] ::", query)
+	fmt.Println("[USER LOGIN] :: ", results)
 	if len(results) == 0 {
 		c.AbortWithStatusJSON(400, gin.H{"error": "User does not exist"})
 		return
@@ -77,7 +78,12 @@ func LoginHandler(c *gin.Context) {
 		c.AbortWithStatusJSON(400, gin.H{"error": "Password is incorrect"})
 		return
 	}
-
 	token, _ := CreateJwt(results[0])
-	c.JSON(200, gin.H{"jwt": token})
+	c.JSON(200, gin.H{
+		"jwt":       token,
+		"FirstName": results[0].FirstName,
+		"LastName":  results[0].LastName,
+		"Email":     results[0].Email,
+		"ID":        results[0].ID,
+	})
 }

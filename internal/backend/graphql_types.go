@@ -46,6 +46,7 @@ var UserType = graphql.NewObject(
 				},
 			},
 			"BoardOrder": &graphql.Field{Type: graphql.String},
+			"Theme":      &graphql.Field{Type: graphql.String},
 		},
 	},
 )
