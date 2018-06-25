@@ -18,13 +18,12 @@ var UserResolver = &graphql.Field{
 	},
 	Resolve: func(params graphql.ResolveParams) (interface{}, error) {
 		id, isOk := params.Args["id"]
-		var queryResult []User
+		var queryResult User
 		if isOk {
 			query := fmt.Sprintf(GetUserById, id)
 			row := GetDb().QueryRow(query)
 			row.Scan(&queryResult)
 			fmt.Println(queryResult)
-			fmt.Println("[USER QUERY]::", queryResult)
 			return queryResult, nil
 		}
 		return queryResult, nil
