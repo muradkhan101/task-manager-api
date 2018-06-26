@@ -25,6 +25,9 @@ var UserType = graphql.NewObject(
 					if isOk {
 						query := fmt.Sprintf(GetIssuesByOwner, user.ID)
 						err := GetDb().Select(&queryResult, query)
+						for i, val := range queryResult {
+							fmt.Println(i, ":", val.Status)
+						}
 						return queryResult, err
 					}
 					return queryResult, nil
@@ -39,7 +42,6 @@ var UserType = graphql.NewObject(
 					if isOk {
 						query := fmt.Sprintf(GetBoardsByOwner, user.ID)
 						err := GetDb().Select(&queryResult, query)
-						fmt.Println(queryResult)
 						return queryResult, err
 					}
 					return queryResult, nil
@@ -89,7 +91,6 @@ var BoardType = graphql.NewObject(
 					board, isOk := params.Source.(Board)
 					if isOk {
 						query := fmt.Sprintf(GetIssuesByBoard, board.ID)
-						fmt.Println("query: ", query)
 						err := GetDb().Select(&queryResult, query)
 						return queryResult, err
 					}

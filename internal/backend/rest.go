@@ -38,7 +38,7 @@ func CreateUserHandler(c *gin.Context) {
 	}
 	id, _ := res.LastInsertId()
 	user.ID = int32(id)
-
+	user.BoardOrder = "[]"
 	token, err := CreateJwt(user)
 
 	if err != nil {

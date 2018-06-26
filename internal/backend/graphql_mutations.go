@@ -35,6 +35,7 @@ var CreateBoardMutation = &graphql.Field{
 
 		id, _ := res.LastInsertId()
 		board.ID = int32(id)
+		board.TaskOrder = "[]"
 		return board, err
 	},
 }
@@ -52,6 +53,23 @@ var UpdateBoardMutation = &graphql.Field{
 
 		_, err := GetDb().NamedExec(UpdateBoard, board)
 		return board, err
+	},
+}
+
+var RemoveBoardMutation = &graphql.Field{
+	Type:        graphql.Boolean,
+	Description: "Remove a board",
+	Args: graphql.FieldConfigArgument{
+		"boardId": &graphql.ArgumentConfig{Type: graphql.NewNonNull(graphql.Int)},
+	},
+	Resolve: func(params graphql.ResolveParams) (interface{}, error) {
+		boardId, _ := params.Args["boardId"]
+		queryStr := fmt.Sprintf(RemoveBoard, boardId)
+		_, err := GetDb().Exec(queryStr)
+		if err != nil {
+			return false, err
+		}
+		return true, nil
 	},
 }
 
@@ -84,8 +102,25 @@ var UpdateIssueMutation = &graphql.Field{
 		var issue Issue
 		paramsToStruct(&params, "issue", &issue)
 		_, err := GetDb().NamedExec(UpdateIssue, issue)
-
+		fmt.Println("[ISSUE]", issue.Status)
 		return issue, err
+	},
+}
+
+var RemoveIssueMutation = &graphql.Field{
+	Type:        graphql.Boolean,
+	Description: "Remove an issue",
+	Args: graphql.FieldConfigArgument{
+		"taskId": &graphql.ArgumentConfig{Type: graphql.NewNonNull(graphql.Int)},
+	},
+	Resolve: func(params graphql.ResolveParams) (interface{}, error) {
+		taskId, _ := params.Args["taskId"]
+		queryStr := fmt.Sprintf(RemoveIssue, taskId)
+		_, err := GetDb().Exec(queryStr)
+		if err != nil {
+			return false, err
+		}
+		return true, nil
 	},
 }
 
