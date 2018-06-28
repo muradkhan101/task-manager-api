@@ -32,7 +32,7 @@ const (
 	UpdateBoard      = "UPDATE boards SET name = :name WHERE id = :id;"
 	RemoveBoard      = "DELETE FROM boards WHERE id = %d;"
 	CreateIssue      = "INSERT INTO issues (name, description, created_by, create_date, owner, board) VALUES (:name, :description, :created_by, :create_date, :owner, :board);"
-	UpdateIssue      = "UPDATE issues SET name = :name, description = :description, status = :status WHERE id = :id;"
+	UpdateIssue      = "UPDATE issues SET name = :name, description = :description, status = :status, board = :board WHERE id = :id;"
 	RemoveIssue      = "DELETE FROM issues WHERE id = %d;"
 	CreateUser       = "INSERT INTO users (first_name, last_name, email, password, salt) VALUES (:first_name, :last_name, :email, :password, :salt);"
 	UpdateTaskOrder  = "UPDATE boards SET task_order = \"%s\" WHERE id = %d;"
