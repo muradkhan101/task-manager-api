@@ -12,6 +12,7 @@ var DB *sqlx.DB
 
 func main() {
 	DB = backend.GetDb()
+	gin.SetMode(gin.ReleaseMode)
 	r := gin.Default()
 	r.Use(jwtAuth())
 	r.Use(addCors())
