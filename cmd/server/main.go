@@ -60,7 +60,7 @@ func main() {
 	// 		c.String(200, "It works!")
 	// 	})
 	// }
-	r.Run(":80")
+	r.Run()
 }
 
 func optionsAdder(optionTypes string) func(c *gin.Context) {
